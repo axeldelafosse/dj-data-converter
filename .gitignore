@@ -8,7 +8,6 @@ pom.xml.asc
 /checkouts/
 .cpcache/
 .cljs_node_repl
-package-lock.json
 node_modules
 /out/
 /cljs-test-runner-out/
@@ -18,3 +17,4 @@ node_modules
 /pkg/
 /*.xml
 /*.nml
+.DS_Store

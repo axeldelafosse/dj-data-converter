@@ -1,74 +1,78 @@
-# dj-data-converter [![Build](https://github.com/digital-dj-tools/dj-data-converter/workflows/Build/badge.svg)](https://github.com/digital-dj-tools/dj-data-converter/actions?query=workflow%3ABuild)
+# dj-data-converter
 
-A command-line app for converting data files to and from different DJ software formats, such as [Traktor](https://www.native-instruments.com/en/products/traktor/dj-software/traktor-pro-3/), [Rekordbox](https://rekordbox.com/en/) and [Serato DJ](https://serato.com/dj).
+A command-line app for converting data files to and from [Traktor](https://www.native-instruments.com/en/products/traktor/dj-software/traktor-pro-3/) and [Rekordbox](https://rekordbox.com/en/).
 
-In addition to an automated test suite comprising specification-driven tests on expected input and output data, this app has been manually tested with Traktor Pro 2 and Rekordbox 5.7.0 on Windows 10.
+> This is a fork of [digital-dj-tools/dj-data-converter](https://github.com/digital-dj-tools/dj-data-converter) with some additional features.
+> This version converts the key, the label and the color of the tracks. If you want to use it, you need to compile and package the app yourself.
+
+> I'm planning to add more features to this fork. For example, I want to add the ability to improve your Traktor collection.
+> You will be able to write the classic key to Traktor's "Key Text". You will be able to copy the tempo, cue points and other information from a regular file to its stem file (or vice versa).
 
 ## Features
 
-Feature | Basic Edition | Pro Edition
--|-|-
-Convert from Traktor to Rekordbox | Yes | Yes
-Convert from Rekordbox to Traktor | Yes | No (1)
-Convert tempo (BPM) and beat grid | Yes | Yes
-Convert cue points and loops | Yes | Yes
-Convert multiple beat grid markers | Yes | Yes
-Correct 26ms grid offset when converting mp3 files | Yes | Yes
-Convert unsupported Traktor cue types using a colour mapping | Yes | Yes
-Convert playlists | No | Yes
-Runs on Windows | Yes, [download here](https://github.com/digital-dj-tools/dj-data-converter/releases) | Yes
-Runs on Mac | Yes, [download here](https://github.com/digital-dj-tools/dj-data-converter/releases) | Yes
-Price | FREE! | [Contact me](mailto:abcoyle@gmail.com) for pricing
-
-(1) Will be released in a new version TBA
-
-## Motivation
-
-Unlike other apps for handling this task, this app is **open source** and available on **Windows**, in addition to **Mac OS**.
-
-## Install
-
-Download the Basic Edition from the [releases](https://github.com/digital-dj-tools/dj-data-converter/releases) page as a zip or tar.gz archive, and then extract the archive into a directory.
-
-To download the Pro Edition, please [contact me](mailto:abcoyle@gmail.com) for pricing.
+| Feature                                                      | ✅  |
+| ------------------------------------------------------------ | --- |
+| Convert from Traktor to Rekordbox                            | Yes |
+| Convert from Rekordbox to Traktor                            | Yes |
+| Convert tempo (BPM) and beat grid                            | Yes |
+| Convert cue points and loops                                 | Yes |
+| Convert multiple beat grid markers                           | Yes |
+| Convert key                                                  | Yes |
+| Convert color                                                | Yes |
+| Correct 26ms grid offset when converting mp3 files           | Yes |
+| Convert unsupported Traktor cue types using a colour mapping | Yes |
+| Convert playlists                                            | No  |
+| Runs on Windows                                              | Yes |
+| Runs on Mac                                                  | Yes |
 
 ## Usage
 
 ### Windows
-1. Open a command prompt and change to the directory where the archive was extracted:
-    ```
-    cd <download-dir>
-    ```
-2. Now execute the app, providing the location of the Traktor collection file, or an exported Rekordbox collection file:
-    ```
-    dj-data-converter-win.exe [options] <traktor-or-rekordbox-collection-file>
-    ```
-    For example, assuming Traktor is installed in the default location on Windows:
-    ```
-    dj-data-converter-win.exe "C:\Users\<your-user-name>\Documents\Native Instruments\Traktor <version-number>\collection.nml"
-    ```
-    A converted `rekordbox.xml` or `collection.nml` file will be created in the current directory.
 
-    If the conversion fails due to an error, an `error-report.edn` file will be created, also in the current directory.
+1. Open a command prompt and change to the directory where the archive was extracted:
+   ```
+   cd <download-dir>
+   ```
+2. Now execute the app, providing the location of the Traktor collection file, or an exported Rekordbox collection file:
+
+   ```
+   dj-data-converter-win.exe [options] <traktor-or-rekordbox-collection-file>
+   ```
+
+   For example, assuming Traktor is installed in the default location on Windows:
+
+   ```
+   dj-data-converter-win.exe "C:\Users\<your-user-name>\Documents\Native Instruments\Traktor <version-number>\collection.nml"
+   ```
+
+   A converted `rekordbox.xml` or `collection.nml` file will be created in the current directory.
+
+   If the conversion fails due to an error, an `error-report.edn` file will be created, also in the current directory.
 
 ### Mac
-1. Open a terminal and change to the directory where the archive was extracted:
-    ```
-    cd <download-dir>
-    ```
-2. Now execute the app, providing the location of the Traktor collection file, or an exported Rekordbox collection file:
-    ```
-    ./dj-data-converter-macos [options] <traktor-or-rekordbox-collection-file>
-    ```
-    For example, assuming Traktor is installed in the default location on Mac OS:
-    ```
-    ./dj-data-converter-macos "/Users/<your-user-name>/Documents/Native Instruments/Traktor <version-number>/collection.nml"
-    ```
-    A converted `rekordbox.xml` or `collection.nml` file will be created in the current directory.
 
-    If the conversion fails due to an error, an `error-report.edn` file will be created, also in the current directory.
+1. Open a terminal and change to the directory where the archive was extracted:
+   ```
+   cd <download-dir>
+   ```
+2. Now execute the app, providing the location of the Traktor collection file, or an exported Rekordbox collection file:
+
+   ```
+   ./dj-data-converter-macos [options] <traktor-or-rekordbox-collection-file>
+   ```
+
+   For example, assuming Traktor is installed in the default location on Mac OS:
+
+   ```
+   ./dj-data-converter-macos "/Users/<your-user-name>/Documents/Native Instruments/Traktor <version-number>/collection.nml"
+   ```
+
+   A converted `rekordbox.xml` or `collection.nml` file will be created in the current directory.
+
+   If the conversion fails due to an error, an `error-report.edn` file will be created, also in the current directory.
 
 ### Options
+
 ```
   -h, --help
 ```
@@ -89,51 +93,38 @@ To download the Pro Edition, please [contact me](mailto:abcoyle@gmail.com) for p
 
 - Back up any existing `collection.nml` file. The location of this file will depend on whether the app is being used on Windows or Mac:
 
-  OS | File Location
-  -|-
-  Windows | `C:\Users\<your-user-name>\Documents\Native Instruments\Traktor <version-number>\collection.nml`
-  Mac | `/Users/<your-user-name>/Documents/Native Instruments/Traktor <version-number>/collection.nml`
+  | OS      | File Location                                                                                    |
+  | ------- | ------------------------------------------------------------------------------------------------ |
+  | Windows | `C:\Users\<your-user-name>\Documents\Native Instruments\Traktor <version-number>\collection.nml` |
+  | Mac     | `/Users/<your-user-name>/Documents/Native Instruments/Traktor <version-number>/collection.nml`   |
+
 - When the backup is complete, copy the created `collection.nml` file to the above location, overwriting the existing file.
 - Open Traktor. Care must be taken to ensure that Traktor doesn't overwrite grid data converted from Rekordbox, otherwise any cue points or loops may not align with the grid. Before loading tracks converted from Rekordbox, it is recommended to either:
   - Enable analysis lock for the tracks, or
   - Right-click the tracks, select `Analyze (Async)`, and tick `Special`, `Key` and `Gain`, and untick `BPM`.
 - Now load the converted tracks and check the converted data. Report any problems as GitHub issues in this project.
 
-## Why a Command-Line App Instead of a GUI App?
-
-This app is mostly concerned with availability, correctness and transparency, for which a command-line app is more than adequate. 
-
-- Availability: downloads for multiple platforms, including Windows.
-- Correctness: determining the most appropriate conversion rules to follow.
-- Transparency: to build user trust around the claimed feature set.
-
-However, usability is important, and lack of familiarity can be an problem for command-line apps; this will be addressed in good time!
-
-## Donations
-
-Donations for the Basic Edition are most welcome! Becoming a [sponsor](https://github.com/sponsors/alzadude) will help to support more DJ software formats, add new features, improve performance and fix bugs.
-
 ## Conversion Rules
 
 ### From Traktor to Rekordbox
 
 - For each cue point in Traktor:
-   - An indexed hot cue is created, with the index matching the index in Traktor.
-   - An additional non-indexed memory cue is added for convenience, tagged with the prefix `[djdc]`. These tagged cues will be removed when converting from Rekordbox back to Traktor.
-   - If the cue point is a grid cue, a tempo is created.
+  - An indexed hot cue is created, with the index matching the index in Traktor.
+  - An additional non-indexed memory cue is added for convenience, tagged with the prefix `[djdc]`. These tagged cues will be removed when converting from Rekordbox back to Traktor.
+  - If the cue point is a grid cue, a tempo is created.
 - The cue point names are copied over as-is.
 - Tracks without a playtime are not copied (Rekordbox requires this as total time).
 - Tracks without a location set are not copied.
 - The cue point types are mapped as follows:
 
-  Traktor Type | Traktor Colour | Rekordbox Type | Rekordbox Colour
-  -|-|-|-
-  Cue | Blue | Cue | Green (default)
-  Fade-in | Orange | Cue | Pink
-  Fade-out | Orange | Cue | Pink
-  Load | Yellow | Cue | Yellow (unchanged)
-  Grid | White | Cue | White (unchanged)
-  Loop | Green | Loop | Orange (default)
+  | Traktor Type | Traktor Colour | Rekordbox Type | Rekordbox Colour   |
+  | ------------ | -------------- | -------------- | ------------------ |
+  | Cue          | Blue           | Cue            | Green (default)    |
+  | Fade-in      | Orange         | Cue            | Pink               |
+  | Fade-out     | Orange         | Cue            | Pink               |
+  | Load         | Yellow         | Cue            | Yellow (unchanged) |
+  | Grid         | White          | Cue            | White (unchanged)  |
+  | Loop         | Green          | Loop           | Orange (default)   |
 
 ### From Rekordbox to Traktor
 
@@ -144,27 +135,29 @@ Donations for the Basic Edition are most welcome! Becoming a [sponsor](https://g
 - The hot cue and memory cue names are copied over as-is.
 - The hot cue and memory cue types are mapped as follows:
 
-  Rekordbox Type | Traktor Type
-  -|-
-  Cue | Cue
-  Loop | Loop
+  | Rekordbox Type | Traktor Type |
+  | -------------- | ------------ |
+  | Cue            | Cue          |
+  | Loop           | Loop         |
 
 ## Field Mapping
 
-Field | Traktor | Rekordbox | Copied?
--|-|-|-
-Album Title | Title | Album | Yes
-Artist | Artist | Artist | Yes
-Bpm | Bpm | AverageBpm | Yes
-Comments | Comment | Comments | Yes
-Date Added | Import Date | Date Added | Yes
-Genre | Genre | Genre | Yes
-Label | Label | Label | No
-Total Time | Playtime | Total Time | Yes
-Play Count | Playcount | Play Count | No
-Track Number | Track | Track Number | Yes
-Track Title | Title | Name | Yes
-Year | Release Date | Year | No
+| Field        | Traktor      | Rekordbox    | Copied? |
+| ------------ | ------------ | ------------ | ------- |
+| Album Title  | Title        | Album        | Yes     |
+| Artist       | Artist       | Artist       | Yes     |
+| Bpm          | Bpm          | AverageBpm   | Yes     |
+| Comments     | Comment      | Comments     | Yes     |
+| Date Added   | Import Date  | Date Added   | Yes     |
+| Genre        | Genre        | Genre        | Yes     |
+| Label        | Label        | Label        | Yes     |
+| Total Time   | Playtime     | Total Time   | Yes     |
+| Play Count   | Playcount    | Play Count   | No      |
+| Track Number | Track        | Track Number | Yes     |
+| Track Title  | Title        | Name         | Yes     |
+| Year         | Release Date | Year         | No      |
+
+> Some fields are not copied yet. I'm planning to copy them in the future.
 
 ## Current Limitations
 
@@ -174,40 +167,39 @@ Year | Release Date | Year | No
 - Disabling the "Store Beatmarker as Hotcue" Traktor setting is not supported.
 - Performance is not yet optimal, however a ~10,000 track Traktor or Rekordbox collection should convert in under two minutes.
 
-## Bug Reports
-
-Please report any possible bugs as GitHub issues in this project, and remember to include the steps performed, what was expected and the actual result. If an error occurred during the conversion, please attach the generated `error-report.edn` file.
-
-## Roadmap
-
-To see planned and upcoming features, refer to the `Unreleased` section at the top of the [Changelog](CHANGELOG.md).
-
-## Feature Requests
-
-Requests are welcome, please create them as GitHub issues in this project. However, before creating any new requests, please check the `Unreleased` section at the top of the [Changelog](CHANGELOG.md) first, to see if the feature is already planned for.
-
 ## Developers
 
-Developers will need to install Java, NodeJS and the Clojure [command line tools](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools
-).
+Developers will need to install Java, NodeJS and the Clojure [command line tools](https://clojure.org/guides/getting_started#_clojure_installer_and_cli_tools).
 
 ### Running the Tests
 
 ```
-clj -Adev:test-cljs
+clj -Mdev:test-cljs
 ```
 
 ### Starting a CIDER-compatible NREPL Server
+
 ```
-clj -Adev:nrepl-server
+clj -Mdev:nrepl-server
+```
+
+### Compiling the App
+
+```
+clj -M:compile-cljs
+```
+
+### Packaging the App
+
+```
+npm run build-mac
 ```
 
 ## Credits
 
 - [Phoebox](https://github.com/pstare/phoebox) for the suggested cue point colour mapping
+- [Digital DJ Tools](https://github.com/digital-dj-tools) for the original version
 
 ## License
 
-Copyright © 2018 Digital DJ Tools
-
-Released under the MIT license.
+MIT
