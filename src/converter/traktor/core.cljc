@@ -44,6 +44,12 @@
                                         :spec {:tag (s/spec #{:INFO})
                                                :attrs {(std/opt :COMMENT) string?
                                                        (std/opt :GENRE) string?
+                                                       (std/opt :LABEL) string?
+                                                       (std/opt :KEY) string?
+                                                       (std/opt :COLOR) string?
+                                                       ; (std/opt :PRODUCER) string?
+                                                       ; (std/opt :REMIXER) string?
+                                                       ; (std/opt :RELEASE_DATE) (time/date-str-spec nml/nml-date-format)
                                                        ; FIXME encoding to ::time/date won't work until this issue is fixed: 
                                                        ; https://github.com/metosin/spec-tools/issues/183
                                                        (std/opt :IMPORT_DATE) (time/date-str-spec nml/nml-date-format)
@@ -54,7 +60,8 @@
                   :loudness (s/? (std/spec {:name ::loudness
                                             :spec {:tag (s/spec #{:LOUDNESS})}}))
                   :musical-key (s/? (std/spec {:name ::musical-key
-                                               :spec {:tag (s/spec #{:MUSICAL_KEY})}}))
+                                               :spec {:tag (s/spec #{:MUSICAL_KEY})
+                                                      :attrs {(std/opt :VALUE) string?}}}))
                   :loopinfo (s/? (std/spec {:name ::loopinfo
                                             :spec {:tag (s/spec #{:LOOPINFO})}}))
                   :cue (s/* tc/cue-spec)
@@ -85,16 +92,20 @@
           (and
            (= (::u/title item) (zx/attr entry-z :TITLE))
            (= (::u/artist item) (zx/attr entry-z :ARTIST))
+           (= (::u/musical-key item) (zx/attr entry-z :MUSICAL_KEY))
            (= (::u/total-time item) (and info-z (zx/attr info-z :PLAYTIME)))
            (= (::u/comments item) (and info-z (zx/attr info-z :COMMENT)))
            (= (::u/genre item) (and info-z (zx/attr info-z :GENRE)))
+           (= (::u/label item) (and info-z (zx/attr info-z :LABEL)))
+           (= (::u/key item) (and info-z (zx/attr info-z :KEY)))
+           (= (::u/color item) (and info-z (zx/attr info-z :COLOR)))
            (= (::u/date-added item) (nml/string->date (and info-z (zx/attr info-z :IMPORT_DATE))))
            (equiv-bpm? item entry-z)))))
 
 (defn item->entry
   [nml-date nml-time {:keys [::u/location ::u/title ::u/artist ::u/track-number ::u/album
                              ::u/total-time ::u/bpm ::u/date-added ::u/comments ::u/genre
-                             ::u/tempos ::u/markers]}]
+                             ::u/label ::u/key ::u/musical-key ::u/color ::u/tempos ::u/markers]}]
   (p ::item->entry
      {:tag :ENTRY
       :attrs (cond-> {}
@@ -108,14 +119,19 @@
                                                 :attrs (cond-> {}
                                                          track-number (assoc :TRACK track-number)
                                                          album (assoc :TITLE album))})
-                 (or date-added comments genre total-time) (conj {:tag :INFO
-                                                                  :attrs (cond-> {}
-                                                                           date-added (assoc :IMPORT_DATE (nml/date->string date-added))
-                                                                           comments (assoc :COMMENT comments)
-                                                                           genre (assoc :GENRE genre)
-                                                                           total-time (assoc :PLAYTIME total-time))})
+                 (or date-added comments label key color genre total-time) (conj {:tag :INFO
+                                                                                  :attrs (cond-> {}
+                                                                                          date-added (assoc :IMPORT_DATE (nml/date->string date-added))
+                                                                                          comments (assoc :COMMENT comments)
+                                                                                          genre (assoc :GENRE genre)
+                                                                                          label (assoc :LABEL label)
+                                                                                          key (assoc :KEY key)
+                                                                                          color (assoc :COLOR color)
+                                                                                          total-time (assoc :PLAYTIME total-time))})
                  bpm (conj {:tag :TEMPO
                             :attrs {:BPM bpm}})
+                 musical-key (conj {:tag :MUSICAL_KEY
+                                    :attrs {:VALUE musical-key}})
                  markers (concat (map tc/marker->cue 
                                       (concat (um/indexed-markers markers) (um/non-indexed-markers-without-matching-indexed-marker markers))))
                  tempos (concat (map tc/tempo->cue-tagged 
@@ -163,8 +179,12 @@
           (and
            (= (zx/attr entry-z :TITLE) (::u/title item))
            (= (zx/attr entry-z :ARTIST) (::u/artist item))
+           (= (zx/attr entry-z :MUSICAL_KEY) (::u/musical-key item))
            (= (and info-z (zx/attr info-z :COMMENT)) (::u/comments item))
            (= (and info-z (zx/attr info-z :GENRE)) (::u/genre item))
+           (= (and info-z (zx/attr info-z :LABEL)) (::u/label item))
+           (= (and info-z (zx/attr info-z :KEY)) (::u/key item))
+           (= (and info-z (zx/attr info-z :COLOR)) (::u/color item))
            (= (and info-z (zx/attr info-z :IMPORT_DATE)) (nml/date->string (::u/date-added item)))
            (= (and info-z (zx/attr info-z :PLAYTIME)) (::u/total-time item))
            (equiv-markers? entry-z item)
@@ -176,6 +196,8 @@
   (p ::entry->item
      (let [title (zx/attr entry-z :TITLE)
            artist (zx/attr entry-z :ARTIST)
+           musical-key-z (zx/xml1-> entry-z :MUSICAL_KEY)
+           musical-key (and musical-key-z (zx/attr musical-key-z :VALUE))
            album-z (zx/xml1-> entry-z :ALBUM)
            track (and album-z (zx/attr album-z :TRACK))
            album-title (and album-z (zx/attr album-z :TITLE))
@@ -183,6 +205,9 @@
            import-date (and info-z (zx/attr info-z :IMPORT_DATE))
            comment (and info-z (zx/attr info-z :COMMENT))
            genre (and info-z (zx/attr info-z :GENRE))
+           label (and info-z (zx/attr info-z :LABEL))
+           key (and info-z (zx/attr info-z :KEY))
+           color (and info-z (zx/attr info-z :COLOR))
            playtime (and info-z (zx/attr info-z :PLAYTIME))
            tempo-z (zx/xml1-> entry-z :TEMPO)
            bpm (and tempo-z (zx/attr tempo-z :BPM))
@@ -191,11 +216,15 @@
        (cond-> {::u/location (tl/location->url (zx/xml1-> entry-z :LOCATION))}
          title (assoc ::u/title title)
          artist (assoc ::u/artist artist)
+         musical-key (assoc ::u/musical-key musical-key)
          track (assoc ::u/track-number track)
          album-title (assoc ::u/album album-title)
          import-date (assoc ::u/date-added (nml/string->date import-date))
          comment (assoc ::u/comments comment)
          genre (assoc ::u/genre genre)
+         label (assoc ::u/label label)
+         key (assoc ::u/key key)
+         color (assoc ::u/color color)
          playtime (assoc ::u/total-time playtime)
          bpm (assoc ::u/bpm bpm)
          (not-empty cues-z) (assoc ::u/markers (map tc/cue->marker cues-z))

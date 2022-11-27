@@ -21,6 +21,12 @@
    (std/opt ::date-added) ::time/date
    (std/opt ::comments) string?
    (std/opt ::genre) string?
+   (std/opt ::label) string?
+   (std/opt ::key) string? ; Traktor "key text"
+   (std/opt ::musical-key) string? ; Traktor "open key"
+   (std/opt ::color) string?
+   ; (std/opt ::producer) string?
+   ; (std/opt ::remixer) string?
    (std/opt ::tempos) [ut/tempo-spec]
    (std/opt ::markers) [um/marker-spec]})
 
