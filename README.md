@@ -5,9 +5,6 @@ A command-line app for converting data files to and from [Traktor](https://www.n
 > This is a fork of [digital-dj-tools/dj-data-converter](https://github.com/digital-dj-tools/dj-data-converter) with some additional features.
 > This version converts the key, the label and the color of the tracks. If you want to use it, you need to compile and package the app yourself.
 
-> I'm planning to add more features to this fork. For example, I want to add the ability to improve your Traktor collection.
-> You will be able to write the classic key to Traktor's "Key Text". You will be able to copy the tempo, cue points and other information from a regular file to its stem file (or vice versa).
-
 ## Features
 
 | Feature                                                      | ✅  |
